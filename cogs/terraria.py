@@ -1,5 +1,6 @@
 import copy
 import logging
+import urllib.parse
 
 import discord
 from discord.ext import commands
@@ -65,6 +66,23 @@ class TerrariaCog(object):
             for name, value in sorted(rules.items()):
                 embed.add_field(name=name, value=value)
         await ctx.send(embed=embed)
+
+    @terraria.command(name='execute', aliases=('e', 'exec'))
+    @commands.is_owner()
+    async def terraria_execute(self, ctx, *, command):
+        ip = self.bot.config.get('terraria', 'ip', None)
+        port = self.bot.config.get('terraria', 'port', 7878)
+        token = self.bot.config.get('terraria', 'token', None)
+        if command[0] != '/':
+            command = '/' + command
+        async with self.session.get(
+            (f'http://{ip}:{port}/v3/server/rawcmd'
+             f'?token={token}&cmd={urllib.parse.quote(command)}'),
+            timeout=10
+        ) as resp:
+            if resp.status == 200:
+                await ctx.send('Response: ```{}```'.format(
+                    '\n'.join((await resp.json())['response'])))
 
 def setup(bot):
     log.info("adding TerrariaCog to bot")
