@@ -18,7 +18,7 @@ class OwnerCog(object):
         try:
             out = eval(msg)
         except Exception as e:
-            out = e
+            out = '{}: {}'.format(type(e).__name__, e)
         if out == '':
             out = '\u200b'
         if ctx.invoked_with[0] == 'e':
