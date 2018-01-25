@@ -33,7 +33,7 @@ class UtilCog(object):
         """roll dice for numbers
 
         Matches to the expression:
-        ``[die]d(sides)[+/-][modifier][dc][threshold]``
+        ``[die]d<sides>[+/-<modifier>][dc<threshold>]``
         Where...
         die       == number of die to roll  (1 if none)
         sides     == number of sides per die (100 if %)
