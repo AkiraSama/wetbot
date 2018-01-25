@@ -10,6 +10,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 WIKIPEDIA_URL = 'https://en.wikipedia.org/w/api.php'
+UD_URL = 'http://api.urbandictionary.com/v0/define?term={}'
 
 def json_format(response):
     return '```json\n{}```'.format(
@@ -76,6 +77,26 @@ class InfoCog(object):
                 results = response.get('query')
                 if results:
                     out = results['pages'][pageid]['canonicalurl']
+                else:
+                    out = json_format(response)
+
+        await ctx.send(out)
+
+    @commands.command(aliases=('ud',))
+    async def urbandictionary(self, ctx, *, query):
+        """search all the OTHER knowledge"""
+        async with self.session.get(
+            UD_URL.format(urllib.parse.quote(query)),
+            timeout=5
+        ) as resp:
+            if resp.status == 200:
+                response = await resp.json()
+                results = response.get('list')
+                if results:
+                    out = ('http://urbandictionary.com/define.php?term=' +
+                           urllib.parse.quote(results[0]['word']))
+                elif response.get('result_type') == 'no_results':
+                    out = "I got nothin ¯\_(ツ)_/¯"
                 else:
                     out = json_format(response)
 
