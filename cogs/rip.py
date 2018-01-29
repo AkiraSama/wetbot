@@ -24,7 +24,7 @@ class RipCog(object):
             if name != 'EVERYONE':
                 name = name.lower()
             if name in self.ME_ALIASES:
-                name = ctx.author.name
+                name = ctx.author.name.lower()
             out = await self.db.find_one(
                 {'names': {'$in': [name]}},
                 {'rips': ''})
