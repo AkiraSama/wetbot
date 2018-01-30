@@ -14,7 +14,7 @@ UD_URL = 'http://api.urbandictionary.com/v0/define?term={}'
 OXFORD_URL = 'https://od-api.oxforddictionaries.com/api/v1'
 
 DEF_TEMPLATE = (
-    '```\n{word}\n/{pronunciation}/, '
+    '```\n{word}{domains}\n/{pronunciation}/, '
     '{category}\n{definition}```'
 )
 
@@ -109,6 +109,7 @@ class InfoCog(object):
 
         await ctx.send(out)
 
+    domain_str = lambda self, domains: ' ({})'.format(', '.join(domains))
     def iterate_definitions(self, response):
         for lexical_entry in response['lexicalEntries']:
             word = lexical_entry['text']
@@ -125,6 +126,10 @@ class InfoCog(object):
                     for definition in sense['definitions']:
                         yield {
                             'word': word,
+                            'domains': (
+                                self.domain_str(sense['domains'])
+                                if 'domains' in sense
+                                else ''),
                             'pronunciation': pronunciation,
                             'category': category,
                             'definition': definition
@@ -135,6 +140,10 @@ class InfoCog(object):
                         for definition in subsense['definitions']:
                             yield {
                                 'word': word,
+                                'domains': (
+                                    self.domain_str(subsense['domains'])
+                                    if 'domains' in subsense
+                                    else ''),
                                 'pronunciation': pronunciation,
                                 'category': category,
                                 'definition': definition
