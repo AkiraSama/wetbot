@@ -143,7 +143,10 @@ class InfoCog(object):
 
     @commands.command(aliases=('d',))
     async def define(self, ctx, *, query=None):
-        """mommy fixed it"""
+        """mommy fixed it
+        
+        after requesting a definition, use the command with no query
+        in the same channel to cycle through additional meanings"""
         if not query:
             try:
                 if ctx.channel.id in self.active_definitions:
