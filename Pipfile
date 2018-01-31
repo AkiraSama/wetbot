@@ -9,10 +9,10 @@ name = "pypi"
 
 motor = "*"
 
-
-[dev-packages]
-
-"9ae378d" = {path = "./discord.py/", editable = true}
+    [packages.discord]
+    git = "git@github.com:Rapptz/discord.py.git"
+    ref = "rewrite"
+    editable = "true"
 
 
 [requires]
