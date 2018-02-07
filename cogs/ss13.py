@@ -45,7 +45,7 @@ class SS13Cog(object):
                 await asyncio.wait_for(w.drain(), 3.0)
                 adsponse = await asyncio.wait_for(r.read(4096), 3.0)
             except (ConnectionRefusedError, asyncio.TimeoutError):
-                await ctx.send(ctx.channel, embed=discord.Embed(title=title + ' (offline)', color=discord.Color.red()))
+                await ctx.send(embed=discord.Embed(title=title + ' (offline)', color=discord.Color.red()))
                 continue
             if w.can_write_eof(): w.write_eof()
             w.close()
