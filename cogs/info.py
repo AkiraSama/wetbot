@@ -113,12 +113,24 @@ class InfoCog(object):
     def iterate_definitions(self, response):
         for lexical_entry in response['lexicalEntries']:
             word = lexical_entry['text']
+            category = lexical_entry['lexicalCategory'].lower()
+            parent = lexical_entry.get('derivativeOf')
+            if parent:
+                yield {
+                    'word': word,
+                    'domains': '',
+                    'pronunciation': '(no pronunciation)',
+                    'category': category,
+                    'definition': 'see {}'.format(', '.join(
+                        derivative['text'] for derivative in parent
+                    ))
+                }
+                continue
             pronunciation = '/ ᴏʀ /'.join(
                 p['phoneticSpelling']
                 for p
                 in lexical_entry['pronunciations']
             )
-            category = lexical_entry['lexicalCategory'].lower()
             for entry in lexical_entry['entries']:
                 for sense in entry['senses']:
                     if 'definitions' not in sense:
@@ -201,6 +213,7 @@ class InfoCog(object):
             timeout=5
         ) as resp:
             if resp.status == 200:
+                log.info(await resp.json())
                 result = (await resp.json())['results'][0]
 
         self.active_definitions[ctx.channel.id] = (
