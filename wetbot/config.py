@@ -17,8 +17,8 @@ class SelfUpdatingConfig(object):
 
     def _create(self):
         log.info("no configuration file found at specified path")
-        log.info("attempting to create configuration file at " \
-                    "'{}'".format(self._filepath))
+        log.info("attempting to create configuration file at "
+                 "'{}'".format(self._filepath))
         log.debug("attempting to create parent directories")
         self._filepath.parent.mkdir(parents=True, exist_ok=True)
         log.debug("attempting to touch file (umask 0o666)")
@@ -39,8 +39,8 @@ class SelfUpdatingConfig(object):
         except json.decoder.JSONDecodeError:
             # watch this happen all the time because I'm not careful
             log.exception("unable to load configuration from file:")
-            log.error("file may have become corrupted or been " \
-                         "incorrectly modified")
+            log.error("file may have become corrupted or been "
+                      "incorrectly modified")
             self._config = None
         else:
             log.info("configuration loaded successfully")
@@ -55,9 +55,9 @@ class SelfUpdatingConfig(object):
     def get(self, section, value, default=''):
         if self._args and section == self._default_section:
             if value in self._args and self._args[value] is not None:
-                log.debug("requested value '{}' found in arguments with " \
-                             "a value of '{}'".format(
-                    value, self._args[value]))
+                log.debug("requested value '{}' found in arguments with "
+                          "a value of '{}'".format(
+                              value, self._args[value]))
                 return self._args[value]
         if self._config is None:
             # this is a massive cop out for now
@@ -66,8 +66,8 @@ class SelfUpdatingConfig(object):
             log.debug("created section '{}'".format(section))
             self._config[section] = OrderedDict()
         if value not in self._config[section]:
-            log.debug("assigned default value '{}' to value '{}' in " \
-                         "section '{}'".format(default, value, section))
+            log.debug("assigned default value '{}' to value '{}' in "
+                      "section '{}'".format(default, value, section))
             self._config[section][value] = default
             self.write()
         return self._config[section][value]
