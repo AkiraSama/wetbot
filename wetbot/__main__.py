@@ -49,7 +49,7 @@ def main(argv=None):
         datefmt='%m-%d %H:%M:%S',
         style='{')
     ch.setFormatter(formatter)
-    
+
     # set up the root logger
     log = logging.getLogger('')
     log.setLevel(logging.DEBUG)
