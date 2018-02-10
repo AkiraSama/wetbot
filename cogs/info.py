@@ -111,22 +111,25 @@ class InfoCog(object):
 
     domain_str = lambda self, domains: ' ({})'.format(', '.join(domains))
     def iterate_definitions(self, response):
+        return_dict = {
+            'word': '',
+            'domains': '',
+            'pronunciation': '',
+            'category': '',
+            'definition': ''
+        }
         for lexical_entry in response['lexicalEntries']:
-            word = lexical_entry['text']
-            category = lexical_entry['lexicalCategory'].lower()
+            return_dict['word'] = lexical_entry['text']
+            return_dict['category'] = lexical_entry['lexicalCategory'].lower()
             parent = lexical_entry.get('derivativeOf')
             if parent:
-                yield {
-                    'word': word,
-                    'domains': '',
-                    'pronunciation': '(no pronunciation)',
-                    'category': category,
-                    'definition': 'see {}'.format(', '.join(
-                        derivative['text'] for derivative in parent
-                    ))
-                }
+                return_dict['pronunciation'] = '(no pronunciation)'
+                return_dict['definition'] = 'see {}'.format(
+                    ', '.join(
+                        derivative['text'] for derivative in parent))
+                yield return_dict
                 continue
-            pronunciation = '/ ᴏʀ /'.join(
+            return_dict['pronunciation'] = '/ ᴏʀ /'.join(
                 p['phoneticSpelling']
                 for p
                 in lexical_entry['pronunciations']
@@ -136,36 +139,28 @@ class InfoCog(object):
                     if 'definitions' not in sense:
                         continue
                     for definition in sense['definitions']:
-                        yield {
-                            'word': word,
-                            'domains': (
-                                self.domain_str(sense['domains'])
-                                if 'domains' in sense
-                                else ''),
-                            'pronunciation': pronunciation,
-                            'category': category,
-                            'definition': definition
-                        }
+                        return_dict['domains'] = (
+                            self.domain_str(sense['domains'])
+                            if 'domains' in sense
+                            else '')
+                        return_dict['definition'] = definition
+                        yield return_dict
                     if 'subsenses' not in sense:
                         continue
                     for subsense in sense['subsenses']:
                         for definition in subsense['definitions']:
-                            yield {
-                                'word': word,
-                                'domains': (
-                                    self.domain_str(subsense['domains'])
-                                    if 'domains' in subsense
-                                    else ''),
-                                'pronunciation': pronunciation,
-                                'category': category,
-                                'definition': definition
-                            }
+                            return_dict['domains'] = (
+                                self.domain_str(subsense['domains'])
+                                if 'domains' in subsense
+                                else '')
+                            return_dict['definition'] = definition
+                            yield return_dict
 
 
     @commands.command(aliases=('d',))
     async def define(self, ctx, *, query=None):
         """mommy fixed it
-        
+
         after requesting a definition, use the command with no query
         in the same channel to cycle through additional meanings"""
         if not query:
@@ -213,7 +208,6 @@ class InfoCog(object):
             timeout=5
         ) as resp:
             if resp.status == 200:
-                log.info(await resp.json())
                 result = (await resp.json())['results'][0]
 
         self.active_definitions[ctx.channel.id] = (
