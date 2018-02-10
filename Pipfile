@@ -8,11 +8,8 @@ name = "pypi"
 [packages]
 
 motor = "*"
-
-    [packages.discord]
-    git = "git@github.com:Rapptz/discord.py.git"
-    ref = "rewrite"
-    editable = "true"
+discord = { git = "git@github.com:Rapptz/discord.py.git", ref = "rewrite", editable = "true" }
+pynacl = "*"
 
 
 [requires]
