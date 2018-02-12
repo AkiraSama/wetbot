@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 class RipCog(object):
-    ME_ALIASES = ('me', 'moi', 'menya', 'mig')
+    ME_ALIASES = ('me', 'moi', 'ya', 'mig')
 
     def __init__(self, bot):
         self.bot = bot
