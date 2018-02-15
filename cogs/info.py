@@ -214,9 +214,12 @@ class InfoCog(object):
             self.iterate_definitions(result)
         )
 
-        await ctx.send(DEF_TEMPLATE.format(
-            **next(self.active_definitions[ctx.channel.id])
-        ))
+        try:
+            await ctx.send(DEF_TEMPLATE.format(
+                **next(self.active_definitions[ctx.channel.id])
+            ))
+        except StopIteration:
+            await ctx.send("there is not even *one* of that thing")
 
 def setup(bot):
     log.info("adding InfoCog to bot")
