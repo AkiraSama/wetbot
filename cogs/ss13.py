@@ -34,7 +34,7 @@ class SS13Cog(object):
     @commands.command()
     async def goon(self, ctx):
         """something awful this way comes"""
-        for name, address in {'LLJK1': ('lljk1.goonhub.com', 26100), 'LLJK2': ('lljk2.goonhub.com', 26200)}.items():
+        for name, address in {'goon1': ('goon1.goonhub.com', 26100), 'goon2': ('goon2.goonhub.com', 26200)}.items():
             title = f'{name} (byond://{address[0]}:{address[1]})'
             try:
                 r, w = await asyncio.wait_for(asyncio.open_connection(*address), 5.0)
