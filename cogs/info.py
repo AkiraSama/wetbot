@@ -1,9 +1,7 @@
-import aiohttp
 import json
 import logging
 import urllib.parse
 
-import discord
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
@@ -18,9 +16,11 @@ DEF_TEMPLATE = (
     '{category}\n{definition}```'
 )
 
+
 def json_format(response):
     return '```json\n{}```'.format(
         json.dumps(response, indent='  '))
+
 
 class InfoCog(object):
     def __init__(self, bot):
@@ -110,7 +110,7 @@ class InfoCog(object):
         await ctx.send(out)
 
     domain_str = lambda self, domains: ' ({})'.format(', '.join(domains))
-    def iterate_definitions(self, response):
+    def iterate_definitions(self, response): # noqa: E301
         return_dict = {
             'word': '',
             'domains': '',
@@ -122,7 +122,7 @@ class InfoCog(object):
             # set word
             return_dict['word'] = lexical_entry['text']
 
-            # set category 
+            # set category
             return_dict['category'] = lexical_entry['lexicalCategory'].lower()
 
             # set pronunciation, if it exists
@@ -136,7 +136,7 @@ class InfoCog(object):
                 )
             else:
                 return_dict['pronunciation'] = '(no pronunciation)'
-            
+
             # handle case of derivative entry
             parent = lexical_entry.get('derivativeOf')
             if parent:
@@ -171,7 +171,6 @@ class InfoCog(object):
                                     else '')
                                 return_dict['definition'] = definition
                                 yield return_dict
-
 
     @commands.command(aliases=('d',))
     async def define(self, ctx, *, query=None):
@@ -237,7 +236,7 @@ class InfoCog(object):
         except StopIteration:
             await ctx.send("there is not even *one* of that thing")
 
+
 def setup(bot):
     log.info("adding InfoCog to bot")
     bot.add_cog(InfoCog(bot))
-
