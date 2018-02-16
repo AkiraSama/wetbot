@@ -2,11 +2,11 @@ import logging
 import random
 import re
 
-import discord
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
+
 
 class UtilCog(object):
     roll_check = re.compile(
@@ -19,7 +19,7 @@ class UtilCog(object):
     @commands.command(aliases=['c'])
     async def choose(self, ctx, *, pipe_separated_choices):
         """PROGRAMMED VERY FAST
-        
+
         example usage:
         !choose one | two | three"""
         if random.random() > 0.95:
@@ -69,7 +69,7 @@ class UtilCog(object):
                     else '\u2718') if dice_roll.group('threshold') else ''))
             await ctx.send('{}{}'.format(results, ' **' + expressions + '**' if expressions else ''))
 
+
 def setup(bot):
     log.info("adding UtilCog to bot")
     bot.add_cog(UtilCog(bot))
-
