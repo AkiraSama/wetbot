@@ -1,11 +1,11 @@
 import logging
 import random
 
-import discord
 from discord.ext import commands
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
+
 
 class RipCog(object):
     ME_ALIASES = ('me', 'moi', 'ya', 'mig')
@@ -13,13 +13,13 @@ class RipCog(object):
     def __init__(self, bot):
         self.bot = bot
         self.db = bot.db.rips
-    
+
     @commands.command()
     async def rip(self, ctx, *, names):
         """ded
-        
+
         where <names> is a comma-separated list of ded individuals"""
-        
+
         for name in (n.strip() for n in names.split(',')):
             if name != 'EVERYONE':
                 name = name.lower()
@@ -128,7 +128,7 @@ class RipCog(object):
         else:
             await ctx.send('deleted')
 
+
 def setup(bot):
     log.info("adding RipCog to bot")
     bot.add_cog(RipCog(bot))
-
