@@ -130,7 +130,9 @@ class InfoCog(object):
                 yield return_dict
                 continue
             return_dict['pronunciation'] = '/ ᴏʀ /'.join(
-                p['phoneticSpelling']
+                (p['phoneticSpelling']
+                 if 'phoneticSpelling' in p
+                 else '(no pronunciation)')
                 for p
                 in lexical_entry['pronunciations']
             )
