@@ -9,9 +9,10 @@ from discord.ext import commands
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
+
 class SPostCog(object):
     wang = re.compile(
-        r'(\b|_)(([bh]?w)h?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?(\s*([bh]?w|d|st)h?r?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?)*)(\b|_)',
+        r'(\b|_)(([bh]?w)h?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?(\s*([bh]?w|d|st)h?r?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?)*)(\b|_)', # noqa: E501
         re.IGNORECASE)
 
     def __init__(self, bot):
@@ -58,7 +59,7 @@ class SPostCog(object):
         """are you dense?"""
         try:
             await ctx.message.delete()
-        except discord.errors.Forbidden():
+        except discord.errors.Forbidden:
             pass
         await ctx.send(ctx.author.mention + ' ¯\_(ツ)_/¯s')
 
@@ -67,7 +68,7 @@ class SPostCog(object):
         """is explanation really necessary?"""
         try:
             await ctx.message.delete()
-        except:
+        except discord.errors.Forbidden:
             pass
         if person and self.bot.is_owner(ctx.author):
             await ctx.send(person.mention + ' ( ͡° ͜ʖ ͡°)s')
@@ -81,7 +82,11 @@ class SPostCog(object):
         if ctx.author.id in brb_bans:
             await ctx.send("but will you *really* brb?")
         else:
-            await ctx.send('https://cdn.discordapp.com/attachments/263457479239663616/319531749564612617/stickerline-201503031729571.png')
+            await ctx.send(
+                'https://cdn.discordapp.com/attachments/'
+                '263457479239663616/319531749564612617/'
+                'stickerline-201503031729571.png'
+            )
 
     def add_generic(self, doc):
         async def func(self, ctx):
@@ -144,12 +149,13 @@ class SPostCog(object):
                 doc['name'],
                 func)
 
+
 async def create_cog(bot):
     cog = SPostCog(bot)
     await cog._init()
     bot.add_cog(cog)
 
+
 def setup(bot):
     log.info("adding SPostCog to bot")
     bot.loop.create_task(create_cog(bot))
-
