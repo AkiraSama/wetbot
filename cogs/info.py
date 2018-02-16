@@ -119,44 +119,58 @@ class InfoCog(object):
             'definition': ''
         }
         for lexical_entry in response['lexicalEntries']:
+            # set word
             return_dict['word'] = lexical_entry['text']
+
+            # set category 
             return_dict['category'] = lexical_entry['lexicalCategory'].lower()
+
+            # set pronunciation, if it exists
+            if 'pronunciations' in lexical_entry:
+                return_dict['pronunciation'] = '/ ᴏʀ /'.join(
+                    (p['phoneticSpelling']
+                     if 'phoneticSpelling' in p
+                     else '(no pronunciation)')
+                    for p
+                    in lexical_entry['pronunciations']
+                )
+            else:
+                return_dict['pronunciation'] = '(no pronunciation)'
+            
+            # handle case of derivative entry
             parent = lexical_entry.get('derivativeOf')
             if parent:
-                return_dict['pronunciation'] = '(no pronunciation)'
                 return_dict['definition'] = 'see {}'.format(
                     ', '.join(
                         derivative['text'] for derivative in parent))
                 yield return_dict
                 continue
-            return_dict['pronunciation'] = '/ ᴏʀ /'.join(
-                (p['phoneticSpelling']
-                 if 'phoneticSpelling' in p
-                 else '(no pronunciation)')
-                for p
-                in lexical_entry['pronunciations']
-            )
+
+            # process all entries
             for entry in lexical_entry['entries']:
+                # process senses of entry
                 for sense in entry['senses']:
-                    if 'definitions' not in sense:
-                        continue
-                    for definition in sense['definitions']:
-                        return_dict['domains'] = (
-                            self.domain_str(sense['domains'])
-                            if 'domains' in sense
-                            else '')
-                        return_dict['definition'] = definition
-                        yield return_dict
-                    if 'subsenses' not in sense:
-                        continue
-                    for subsense in sense['subsenses']:
-                        for definition in subsense['definitions']:
+                    # process definitions, if they exist
+                    if 'definitions' in sense:
+                        for definition in sense['definitions']:
                             return_dict['domains'] = (
-                                self.domain_str(subsense['domains'])
-                                if 'domains' in subsense
+                                self.domain_str(sense['domains'])
+                                if 'domains' in sense
                                 else '')
                             return_dict['definition'] = definition
                             yield return_dict
+
+                    # process subsenses, if they exist
+                    if 'subsenses' in sense:
+                        for subsense in sense['subsenses']:
+                            # more definitions, inside the subsenses
+                            for definition in subsense['definitions']:
+                                return_dict['domains'] = (
+                                    self.domain_str(subsense['domains'])
+                                    if 'domains' in subsense
+                                    else '')
+                                return_dict['definition'] = definition
+                                yield return_dict
 
 
     @commands.command(aliases=('d',))
