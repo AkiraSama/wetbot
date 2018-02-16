@@ -7,6 +7,7 @@ from pathlib import Path
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
+
 class SelfUpdatingConfig(object):
     def __init__(self, filepath, args=None, default_section=''):
         self._filepath = Path(filepath)
@@ -72,6 +73,7 @@ class SelfUpdatingConfig(object):
             self.write()
         return self._config[section][value]
 
+
 parser = argparse.ArgumentParser(
     description="wetbot - a discord.py based personal bot")
 parser.add_argument('--config', action='store',
@@ -89,6 +91,7 @@ parser.add_argument('--prefix', action='store', default=None,
                     help="command prefix string",
                     dest='command_prefix')
 
+
 def get_configuration(argv, log_handler):
     args = parser.parse_args(argv)
     if args.verbose:
@@ -96,4 +99,3 @@ def get_configuration(argv, log_handler):
         log.debug("set logging level to DEBUG")
 
     return SelfUpdatingConfig(args.config_file, vars(args), 'bot')
-
