@@ -8,6 +8,7 @@ from discord.ext import commands
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
+
 class TerrariaCog(object):
     def __init__(self, bot):
         self.bot = bot
@@ -53,14 +54,18 @@ class TerrariaCog(object):
             inline=False,
             name='players ({players}/{maxplayers})'.format(
                 players=response['playercount'],
-                maxplayers=response['maxplayers']),
-            value=(', '.join(player['nickname'] + (
-                '' if player['active'] else ' (inactive)'
-            ) for player in response['players'])
-                   if response['players']
-                   else 'N/A')
+                maxplayers=response['maxplayers']
+            ),
+            value=(
+                ', '.join(
+                    player['nickname'] + (
+                        '' if player['active'] else ' (inactive)'
+                    ) for player in response['players'])
+                if response['players']
+                else 'N/A'
+            )
         )
-        
+
         rules = response.get('rules')
         if rules:
             for name, value in sorted(rules.items()):
@@ -84,7 +89,7 @@ class TerrariaCog(object):
                 await ctx.send('Response: ```{}```'.format(
                     '\n'.join((await resp.json())['response'])))
 
+
 def setup(bot):
     log.info("adding TerrariaCog to bot")
     bot.add_cog(TerrariaCog(bot))
-
