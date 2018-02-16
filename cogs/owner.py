@@ -6,6 +6,7 @@ from discord.ext import commands
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
+
 class OwnerCog(object):
     def __init__(self, bot):
         self.bot = bot
@@ -14,7 +15,7 @@ class OwnerCog(object):
     @commands.is_owner()
     async def evaluate(self, ctx, *, msg):
         """don't let anyone else touch this one"""
-        bot = self.bot
+        bot = self.bot # noqa: F841
         try:
             out = eval(msg)
         except Exception as e:
@@ -29,7 +30,7 @@ class OwnerCog(object):
     async def extensions(self, ctx):
         """what crap has she loaded into it today?"""
         await ctx.send('```{}```'.format(
-        '\n'.join(sorted(self.bot.extensions.keys()))))
+            '\n'.join(sorted(self.bot.extensions.keys()))))
 
     @commands.command(hidden=True)
     @commands.is_owner()
@@ -68,7 +69,7 @@ class OwnerCog(object):
         else:
             await ctx.send(f"no extension named `{extension}` found")
 
+
 def setup(bot):
     log.info("adding OwnerCog to bot")
     bot.add_cog(OwnerCog(bot))
-
