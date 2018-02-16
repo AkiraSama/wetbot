@@ -11,6 +11,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
+
 class Wetbot(commands.Bot):
     def __init__(self, config, formatter=None, **options):
         self._config = config
@@ -47,7 +48,7 @@ class Wetbot(commands.Bot):
 
     async def on_ready(self):
         log.info(
-            "{}[{}] connected to discord 'cause she cares. " \
+            "{}[{}] connected to discord 'cause she cares. "
             "Bite me.".format(
                 self.user.name,
                 self.user.id))
@@ -74,4 +75,3 @@ class Wetbot(commands.Bot):
         message = copy.copy(ctx.message)
         message.content = self.command_prefix + 'help ' + topic
         await self.process_commands(message)
-
