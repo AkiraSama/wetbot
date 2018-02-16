@@ -3,8 +3,6 @@
 import logging
 import sys
 
-import discord
-
 from .bot import Wetbot
 from .config import get_configuration
 
@@ -29,6 +27,7 @@ LOG_FORMAT_STR_COLOR = (
     f'{ANSI_MAGENTA}{{name}}{ANSI_RESET} '
     '[{levelname}] {message}'
 )
+
 
 def main(argv=None):
     """wetbot's main method"""
@@ -70,6 +69,6 @@ def main(argv=None):
     bot = Wetbot(config)
     bot.run(token)
 
+
 if __name__ == '__main__':
     main(sys.argv)
-
