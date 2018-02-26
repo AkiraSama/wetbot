@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ca62c3b805b9a83ff07c3f88b2b4dfd248ba94aff52f5b732bffc6a03a9b9aa2"
+            "sha256": "46f5d7eeb5c23ed2a7eac964c81db740009d97d898f824618271d1ee2e1f6fa4"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -95,7 +95,7 @@
         },
         "discord": {
             "editable": "true",
-            "git": "git@github.com:Rapptz/discord.py.git",
+            "git": "https://github.com/Rapptz/discord.py.git",
             "ref": "rewrite"
         },
         "idna": {
