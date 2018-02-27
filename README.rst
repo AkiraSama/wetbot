@@ -1,5 +1,7 @@
 wetbot
 ======
+|python badge| |d.py badge|
+
 A discord.py_ (rewrite_) based general-use personal bot.
 
 
@@ -72,3 +74,9 @@ in ``requirements.txt`` from your cloned repository.
 .. _pipenv fancy: https://docs.pipenv.org/install/#fancy-installation-of-pipenv
 .. _pip: https://pip.pypa.io/en/stable/installing/
 .. _virtualenv: https://pypi.python.org/pypi/virtualenv
+
+
+.. |python badge| image:: https://img.shields.io/badge/python-3.6-blue.svg
+   :target: `Python 3.6+`_
+.. |d.py badge| image:: https://img.shields.io/badge/discord.py-rewrite-blue.svg
+   :target: rewrite_
