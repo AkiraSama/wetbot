@@ -53,7 +53,6 @@ def main(argv=None):
     log = logging.getLogger('')
     log.setLevel(logging.DEBUG)
     log.addHandler(ch)
-    log.info("logging initialized")
 
     # get bot's SelfUpdatingConfig
     config = get_configuration(argv[1:], ch)
