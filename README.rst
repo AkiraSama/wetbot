@@ -42,8 +42,8 @@ Basic Method
 ------------
 This installation method requires a git client and pip_. It is
 suggested that you use a virtualenv_ to manage the versions of your
-packages. Various tools exist to manage virtualenvs for, such as
-the one used in the `Recommended Method`_.
+packages. Various tools exist to manage virtualenvs foryou , such
+as the one used in the `Recommended Method`_.
 
 .. code-block:: console
 
