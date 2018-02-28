@@ -69,6 +69,11 @@
             "git": "git://github.com/Rapptz/discord.py.git",
             "ref": "rewrite"
         },
+        "discord.py": {
+            "editable": true,
+            "git": "git://github.com/Rapptz/discord.py.git",
+            "ref": "2f562bd695367aff549676850f84460a2ba0aea2"
+        },
         "idna": {
             "hashes": [
                 "sha256:8c7309c718f94b3a625cb648ace320157ad16ff131ae0af362c9f21b80ef6ec4",
