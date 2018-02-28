@@ -13,7 +13,7 @@ a Debian 10 "buster" system.
 
 Dependencies
 ------------
-- `Python 3.6+`_
+- `Python 3.6`_
 - MongoDB_
 
 
@@ -68,7 +68,7 @@ in ``requirements.txt`` from your cloned repository.
 
 .. _discord.py: https://github.com/Rapptz/discord.py
 .. _rewrite: https://github.com/Rapptz/discord.py/tree/rewrite/
-.. _Python 3.6+: https://www.python.org/downloads/release/python-364/
+.. _Python 3.6: https://www.python.org/downloads/release/python-364/
 .. _MongoDB: https://docs.mongodb.com/manual/installation/
 .. _pipenv: https://docs.pipenv.org/#install-pipenv-today
 .. _pipenv fancy: https://docs.pipenv.org/install/#fancy-installation-of-pipenv
@@ -77,6 +77,6 @@ in ``requirements.txt`` from your cloned repository.
 
 
 .. |python badge| image:: https://img.shields.io/badge/python-3.6-blue.svg
-   :target: `Python 3.6+`_
+   :target: `Python 3.6`_
 .. |d.py badge| image:: https://img.shields.io/badge/discord.py-rewrite-blue.svg
    :target: rewrite_
