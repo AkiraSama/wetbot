@@ -1,14 +1,10 @@
 aiohttp==2.2.5
 async-timeout==2.0.0
-cffi==1.11.5
 chardet==3.0.4
--e git+https://github.com/Rapptz/discord.py.git@2f562bd695367aff549676850f84460a2ba0aea2#egg=discord.py
+-e git://github.com/Rapptz/discord.py.git@2f562bd695367aff549676850f84460a2ba0aea2#egg=discord.py
 idna==2.6
 motor==1.2.1
 multidict==4.1.0
-pycparser==2.18
 pymongo==3.6.0
-PyNaCl==1.2.1
-six==1.11.0
 websockets==4.0.1
 yarl==1.1.1
