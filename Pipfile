@@ -10,7 +10,7 @@ python_version = "3.6"
 motor = "*"
 
     [packages.discord]
-    git = "git://github.com/Rapptz/discord.py.git"
+    git = "https://github.com/Rapptz/discord.py.git"
     ref = "rewrite"
-    editable = "true"
+    editable = true
     extras = ["voice"]
