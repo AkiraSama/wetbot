@@ -8,9 +8,4 @@ python_version = "3.6"
 
 [packages]
 motor = "*"
-
-    [packages.discord]
-    git = "https://github.com/Rapptz/discord.py.git"
-    ref = "rewrite"
-    editable = true
-    extras = ["voice"]
+"discord.py" = {git = "https://github.com/Rapptz/discord.py.git", editable = true, ref = "rewrite", extras = ["voice"]}
