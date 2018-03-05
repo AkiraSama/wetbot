@@ -3,8 +3,8 @@
 import logging
 import sys
 
-from .bot import Wetbot
-from .config import get_configuration
+from wetbot.bot import Wetbot
+from wetbot.config import get_configuration
 
 ANSI_RESET = '\x1b[0m'
 ANSI_RED = '\x1b[30m'
