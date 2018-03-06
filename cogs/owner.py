@@ -55,7 +55,7 @@ class OwnerCog(object):
         except ModuleNotFoundError:
             await ctx.send(f"no extension named `{extension_name}` found")
         except discord.errors.ClientException:
-            await ctx.send(f"`{extension}` is not a valid extension")
+            await ctx.send(f"`{extension_name}` is not a valid extension")
         else:
             await ctx.send(f"loaded extension `{extension_name}`")
             log.info(f"loaded extension '{extension_name}`")
