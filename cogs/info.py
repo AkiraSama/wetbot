@@ -2,7 +2,11 @@ import json
 import logging
 import urllib.parse
 
-from discord.ext import commands
+from aiohttp import ClientSession
+
+from discord.ext.commands import Context, command
+
+from wetbot.bot import Wetbot
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -23,12 +27,12 @@ def json_format(response):
 
 
 class InfoCog(object):
-    def __init__(self, bot):
+    def __init__(self, bot: Wetbot):
         self.bot = bot
-        self.session = bot.http._session
+        self.session = ClientSession()
         self.active_definitions = {}
 
-    async def _wiki_get_pageid(self, query):
+    async def _wiki_get_pageid(self, query: str):
         query = urllib.parse.quote_plus(query)
         query_string = ('?action=query'
                         '&list=search'
@@ -60,8 +64,8 @@ class InfoCog(object):
                         None,
                         json_format(response))
 
-    @commands.command(aliases=('wiki', 'w'))
-    async def wikipedia(self, ctx, *, query):
+    @command(aliases=('wiki', 'w'))
+    async def wikipedia(self, ctx: Context, *, query: str):
         """search all the knowledge"""
         pageid, error = await self._wiki_get_pageid(query)
 
@@ -89,8 +93,8 @@ class InfoCog(object):
 
         await ctx.send(out)
 
-    @commands.command(aliases=('ud',))
-    async def urbandictionary(self, ctx, *, query):
+    @command(aliases=('ud',))
+    async def urbandictionary(self, ctx: Context, *, query: str):
         """search all the OTHER knowledge"""
         async with self.session.get(
             UD_URL.format(urllib.parse.quote(query)),
@@ -110,7 +114,7 @@ class InfoCog(object):
         await ctx.send(out)
 
     domain_str = lambda self, domains: ' ({})'.format(', '.join(domains))
-    def iterate_definitions(self, response): # noqa: E301
+    def iterate_definitions(self, response: dict): # noqa: E301
         return_dict = {
             'word': '',
             'domains': '',
@@ -172,8 +176,8 @@ class InfoCog(object):
                                 return_dict['definition'] = definition
                                 yield return_dict
 
-    @commands.command(aliases=('d',))
-    async def define(self, ctx, *, query=None):
+    @command(aliases=('d',))
+    async def define(self, ctx: Context, *, query: str = None):
         """mommy fixed it
 
         after requesting a definition, use the command with no query
@@ -237,6 +241,6 @@ class InfoCog(object):
             await ctx.send("there is not even *one* of that thing")
 
 
-def setup(bot):
+def setup(bot: Wetbot):
     log.info("adding InfoCog to bot")
     bot.add_cog(InfoCog(bot))
