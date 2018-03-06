@@ -79,6 +79,7 @@ class InfoCog(object):
 
         query_string = ('?action=query'
                         '&prop=info|pageprops|links'
+                        '&pllimit=max'
                         '&format=json'
                         '&pageids={}'
                         '&inprop=url')
@@ -98,7 +99,19 @@ class InfoCog(object):
                     else:
                         out = "try something like... ```{titles}```".format(
                             titles=', '.join(
-                                link['title'] for link in  page['links'])
+                                (link['title']
+                                 if ',' not in link['title']
+                                 else '"{}"'.format(link['title']))
+                                for link in page['links']
+                                if not any(
+                                    link['title'].startswith(s)
+                                    for s in (
+                                        'Talk:',
+                                        'Help:',
+                                        'Wikipedia:'
+                                    )
+                                )
+                            )
                         )
                 else:
                     out = json_format(response)
