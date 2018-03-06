@@ -1,19 +1,21 @@
 import logging
 
 import discord
-from discord.ext import commands
+from discord.ext.commands import Context, command, is_owner
+
+from wetbot.bot import Wetbot
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
 class OwnerCog(object):
-    def __init__(self, bot):
+    def __init__(self, bot: Wetbot):
         self.bot = bot
 
-    @commands.command(aliases=('eval', 'nevaluate', 'neval'), hidden=True)
-    @commands.is_owner()
-    async def evaluate(self, ctx, *, msg):
+    @command(aliases=('eval', 'nevaluate', 'neval'), hidden=True)
+    @is_owner()
+    async def evaluate(self, ctx: Context, *, msg: str):
         """don't let anyone else touch this one"""
         bot = self.bot # noqa: F841
         try:
@@ -26,50 +28,50 @@ class OwnerCog(object):
             out = f'```{out}```'
         await ctx.send(str(out))
 
-    @commands.command()
-    async def extensions(self, ctx):
+    @command()
+    async def extensions(self, ctx: Context):
         """what crap has she loaded into it today?"""
         await ctx.send('```{}```'.format(
             '\n'.join(sorted(self.bot.extensions.keys()))))
 
-    @commands.command(hidden=True)
-    @commands.is_owner()
-    async def reload(self, ctx, extension):
+    @command(hidden=True)
+    @is_owner()
+    async def reload(self, ctx: Context, extension_name: str):
         """you know what it does you built the dang thing"""
-        if extension in self.bot.extensions:
-            await ctx.send(f"reloading extension `{extension}`")
-            log.info(f"reloading exension '{extension}'")
-            self.bot.unload_extension(extension)
-            self.bot.load_extension(extension)
+        if extension_name in self.bot.extensions:
+            await ctx.send(f"reloading extension `{extension_name}`")
+            log.info(f"reloading exension '{extension_name}'")
+            self.bot.unload_extension(extension_name)
+            self.bot.load_extension(extension_name)
         else:
-            await ctx.send(f"no extension named `{extension}` found")
+            await ctx.send(f"no extension named `{extension_name}` found")
 
-    @commands.command(hidden=True)
-    @commands.is_owner()
-    async def load(self, ctx, extension):
+    @command(hidden=True)
+    @is_owner()
+    async def load(self, ctx: Context, extension_name: str):
         """games characters and downloads"""
         try:
-            self.bot.load_extension(extension)
+            self.bot.load_extension(extension_name)
         except ModuleNotFoundError:
-            await ctx.send(f"no extension named `{extension}` found")
+            await ctx.send(f"no extension named `{extension_name}` found")
         except discord.errors.ClientException:
             await ctx.send(f"`{extension}` is not a valid extension")
         else:
-            await ctx.send(f"loaded extension `{extension}`")
-            log.info(f"loaded extension '{extension}`")
+            await ctx.send(f"loaded extension `{extension_name}`")
+            log.info(f"loaded extension '{extension_name}`")
 
-    @commands.command(hidden=True)
-    @commands.is_owner()
-    async def unload(self, ctx, extension):
+    @command(hidden=True)
+    @is_owner()
+    async def unload(self, ctx, extension_name):
         """backbreaking labor"""
-        if extension in self.bot.extensions:
-            await ctx.send(f"unloading extension `{extension}`")
-            log.info(f"unloading extension '{extension}'")
-            self.bot.unload_extension(extension)
+        if extension_name in self.bot.extensions:
+            await ctx.send(f"unloading extension `{extension_name}`")
+            log.info(f"unloading extension '{extension_name}'")
+            self.bot.unload_extension(extension_name)
         else:
-            await ctx.send(f"no extension named `{extension}` found")
+            await ctx.send(f"no extension named `{extension_name}` found")
 
 
-def setup(bot):
+def setup(bot: Wetbot):
     log.info("adding OwnerCog to bot")
     bot.add_cog(OwnerCog(bot))
