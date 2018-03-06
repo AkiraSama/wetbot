@@ -29,8 +29,11 @@ def json_format(response):
 class InfoCog(object):
     def __init__(self, bot: Wetbot):
         self.bot = bot
-        self.session = ClientSession()
+        self.session = ClientSession(loop=bot.loop)
         self.active_definitions = {}
+
+    def __unload(self):
+        self.bot.loop.create_task(self.session.close())
 
     async def _wiki_get_pageid(self, query: str):
         query = urllib.parse.quote_plus(query)
@@ -47,6 +50,7 @@ class InfoCog(object):
         ) as resp:
             if resp.status == 200:
                 response = await resp.json()
+                log.debug(f"wikipedia search response: {response}")
                 results = response.get('query')
                 if results:
                     if results['search']:
@@ -74,7 +78,7 @@ class InfoCog(object):
             return
 
         query_string = ('?action=query'
-                        '&prop=info'
+                        '&prop=info|pageprops|links'
                         '&format=json'
                         '&pageids={}'
                         '&inprop=url')
@@ -86,8 +90,16 @@ class InfoCog(object):
             if resp.status == 200:
                 response = await resp.json()
                 results = response.get('query')
+                log.debug(f"wikipedia info response: {results}")
                 if results:
-                    out = results['pages'][pageid]['canonicalurl']
+                    page = results['pages'][pageid]
+                    if 'disambiguation' not in page['pageprops']:
+                        out = results['pages'][pageid]['canonicalurl']
+                    else:
+                        out = "try something like... ```{titles}```".format(
+                            titles=', '.join(
+                                link['title'] for link in  page['links'])
+                        )
                 else:
                     out = json_format(response)
 
