@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "025acf437447eefba0b4243dc85eed795fb50129a894b4376a78024fc3ffc428"
+            "sha256": "c2c915280965854697553648ffee0a28bc5f729a6bb2331bc07d919909f5b533"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -63,11 +63,8 @@
         },
         "discord.py": {
             "editable": true,
-            "extras": [
-                "voice"
-            ],
             "git": "https://github.com/Rapptz/discord.py.git",
-            "ref": "rewrite"
+            "ref": "2f562bd695367aff549676850f84460a2ba0aea2"
         },
         "idna": {
             "hashes": [

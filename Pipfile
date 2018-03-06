@@ -1,11 +1,17 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
+
 [requires]
+
 python_version = "3.6"
 
+
 [packages]
+
 motor = "*"
 "discord.py" = {git = "https://github.com/Rapptz/discord.py.git", editable = true, ref = "rewrite", extras = ["voice"]}
+aiohttp = "*"
