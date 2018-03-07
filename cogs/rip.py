@@ -1,29 +1,36 @@
 import logging
 import random
 
-from discord.ext import commands
+from discord.ext.commands import Context, command, group, is_owner
+
+from wetbot.bot import Wetbot
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
-class RipCog(object):
-    ME_ALIASES = ('me', 'moi', 'ya', 'mig')
+ME_ALIASES = ('me', 'moi', 'ya', 'mig')
 
+
+def comma_separated_values(argument):
+    return [a.strip() for a in argument.split(',')]
+
+
+class RipCog(object):
     def __init__(self, bot):
         self.bot = bot
         self.db = bot.db.rips
 
-    @commands.command()
-    async def rip(self, ctx, *, names):
+    @command()
+    async def rip(self, ctx: Context, *, names: comma_separated_values):
         """ded
 
         where <names> is a comma-separated list of ded individuals"""
 
-        for name in (n.strip() for n in names.split(',')):
+        for name in names:
             if name != 'EVERYONE':
                 name = name.lower()
-            if name in self.ME_ALIASES:
+            if name in ME_ALIASES:
                 name = ctx.author.name.lower()
             out = await self.db.find_one(
                 {'names': {'$in': [name]}},
@@ -34,22 +41,22 @@ class RipCog(object):
                 except IndexError:
                     return
 
-    @commands.group(hidden=True)
-    @commands.is_owner()
-    async def rips(self, ctx):
+    @group(hidden=True)
+    @is_owner()
+    async def rips(self, ctx: Context):
         """manage rip messages"""
         if ctx.invoked_subcommand is None:
             await self.bot.help_redirect(ctx, 'rips')
 
     @rips.group(name='add')
-    async def rips_add(self, ctx):
+    async def rips_add(self, ctx: Context):
         """add a value to the database"""
         if (ctx.invoked_subcommand is None or
                 ctx.invoked_subcommand.name == 'add'):
             await self.bot.help_redirect(ctx, 'rips add')
 
     @rips_add.command(name='name')
-    async def rips_add_name(self, ctx, *names):
+    async def rips_add_name(self, ctx: Context, *names: str):
         """add a new name or aliases for an existing name"""
         if not names:
             return
@@ -76,7 +83,7 @@ class RipCog(object):
             await ctx.send(', '.join(doc['names']))
 
     @rips_add.command(name='rip')
-    async def rips_add_rip(self, ctx, name, url):
+    async def rips_add_rip(self, ctx: Context, name: str, url: str):
         """add a new rip to a name"""
         res = await self.db.update_one(
             {'names': {'$in': [name]}},
@@ -87,14 +94,14 @@ class RipCog(object):
             await ctx.send('added')
 
     @rips.group(name='del')
-    async def rips_del(self, ctx):
+    async def rips_del(self, ctx: Context):
         """remove a value from the database"""
         if (ctx.invoked_subcommand is None or
                 ctx.invoked_subcommand.name == 'del'):
             await self.bot.help_redirect(ctx, 'rips del')
 
     @rips_del.command(name='name')
-    async def rips_del_name(self, ctx, *names):
+    async def rips_del_name(self, ctx: Context, *names: str):
         """remove an alias or entry"""
         if not names:
             return
@@ -118,7 +125,7 @@ class RipCog(object):
             await ctx.send('\n'.join(out))
 
     @rips_del.command(name='rip')
-    async def rips_del_rip(self, ctx, name, url):
+    async def rips_del_rip(self, ctx: Context, name: str, url: str):
         """remove a rip from a name"""
         res = await self.db.update_one(
             {'names': {'$in': [name]}},
@@ -129,6 +136,6 @@ class RipCog(object):
             await ctx.send('deleted')
 
 
-def setup(bot):
+def setup(bot: Wetbot):
     log.info("adding RipCog to bot")
     bot.add_cog(RipCog(bot))
