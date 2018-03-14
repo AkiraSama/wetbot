@@ -64,14 +64,14 @@ class SPostCog(object):
         await ctx.send(ctx.author.mention + ' ¯\_(ツ)_/¯s')
 
     @commands.command()
-    async def lenny(self, ctx, *, person: discord.Member = None):
+    async def lenny(self, ctx, *, person_owner_only: discord.Member = None):
         """is explanation really necessary?"""
         try:
             await ctx.message.delete()
         except discord.errors.Forbidden:
             pass
-        if person and self.bot.is_owner(ctx.author):
-            await ctx.send(person.mention + ' ( ͡° ͜ʖ ͡°)s')
+        if person_owner_only and await self.bot.is_owner(ctx.author):
+            await ctx.send(person_owner_only.mention + ' ( ͡° ͜ʖ ͡°)s')
         else:
             await ctx.send(ctx.author.mention + ' ( ͡° ͜ʖ ͡°)s')
 
