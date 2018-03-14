@@ -253,6 +253,9 @@ class InfoCog(object):
         ) as resp:
             if resp.status == 200:
                 result = (await resp.json())['results'][0]
+            else:
+                await ctx.send(json_format(await resp.json()))
+                return
 
         self.active_definitions[ctx.channel.id] = (
             self.iterate_definitions(result)
