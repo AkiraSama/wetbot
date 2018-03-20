@@ -139,7 +139,7 @@ class InfoCog(object):
         await ctx.send(out)
 
     domain_str = lambda self, domains: ' ({})'.format(', '.join(domains))
-    def iterate_definitions(self, response: dict): # noqa: E301
+    def iterate_definitions(self, response: dict):  # noqa: E301
         return_dict = {
             'word': '',
             'domains': '',

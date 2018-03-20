@@ -17,7 +17,7 @@ class OwnerCog(object):
     @is_owner()
     async def evaluate(self, ctx: Context, *, msg: str):
         """don't let anyone else touch this one"""
-        bot = self.bot # noqa: F841
+        bot = self.bot  # noqa: F841
         try:
             out = eval(msg)
         except Exception as e:

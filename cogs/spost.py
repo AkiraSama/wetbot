@@ -12,7 +12,7 @@ log.setLevel(logging.DEBUG)
 
 class SPostCog(object):
     wang = re.compile(
-        r'(\b|_)(([bh]?w)h?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?(\s*([bh]?w|d|st)h?r?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?)*)(\b|_)', # noqa: E501
+        r'(\b|_)(([bh]?w)h?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?(\s*([bh]?w|d|st)h?r?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?)*)(\b|_)',  # noqa: E501
         re.IGNORECASE)
 
     def __init__(self, bot):
