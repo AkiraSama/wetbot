@@ -32,14 +32,15 @@
                 "sha256:eb6f1405b607fff7e44168e3ceb5d3c8a8c5a2d3effe0a27f843b16ec047a6d7",
                 "sha256:f0e2ac69cb709367400008cebccd5d48161dd146096a009a632a132babe5714c"
             ],
+            "index": "pypi",
             "version": "==2.2.5"
         },
         "async-timeout": {
             "hashes": [
-                "sha256:c17d8ac2d735d59aa62737d76f2787a6c938f5a944ecf768a8c0ab70b0dea566",
-                "sha256:d3a195a827b0f4068d1616ae2da04aac62e365d14f2b13dbc071f9feed9db4e2"
+                "sha256:00cff4d2dce744607335cba84e9929c3165632da2d27970dbc55802a0c7873d0",
+                "sha256:9093db5b8ddbe4b8f6885d1a6e0ad84ae3155464cbf6877c387605244c285f3c"
             ],
-            "version": "==2.0.0"
+            "version": "==2.0.1"
         },
         "chardet": {
             "hashes": [
@@ -64,6 +65,7 @@
             "hashes": [
                 "sha256:ed4aff66c625efe01398e8416fd1f35f00be77cc5afb242172ee3d03a0307c04"
             ],
+            "index": "pypi",
             "version": "==1.2.1"
         },
         "multidict": {
