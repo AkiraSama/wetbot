@@ -10,13 +10,12 @@ from discord.ext import commands
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-class SS13Cog(object):
-    @staticmethod
-    def goon_query(query):
-        return b'\x00\x83' + struct.pack(
-            '>H', 6 + len(query)
-        ) + b'\x00\x00\x00\x00\x00' + query.encode('ascii') + b'\x00'
+def goon_query(query):
+    return b'\x00\x83' + struct.pack(
+        '>H', 6 + len(query)
+    ) + b'\x00\x00\x00\x00\x00' + query.encode('ascii') + b'\x00'
 
+class SS13Cog(object):
     def __init__(self, bot):
         self.bot = bot
         self.db = bot.db.ss13
@@ -38,10 +37,10 @@ class SS13Cog(object):
             title = f'{name} (byond://{address[0]}:{address[1]})'
             try:
                 r, w = await asyncio.wait_for(asyncio.open_connection(*address), 5.0)
-                w.write(self.goon_query('?status'))
+                w.write(goon_query('?status'))
                 await asyncio.wait_for(w.drain(), 3.0)
                 response = await asyncio.wait_for(r.read(4096), 3.0)
-                w.write(self.goon_query('?admins'))
+                w.write(goon_query('?admins'))
                 await asyncio.wait_for(w.drain(), 3.0)
                 adsponse = await asyncio.wait_for(r.read(4096), 3.0)
             except (ConnectionRefusedError, asyncio.TimeoutError):
