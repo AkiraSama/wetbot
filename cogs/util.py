@@ -67,7 +67,7 @@ class UtilCog(object):
                  for r in rolls) + ')' if len(rolls) > 1 else
                  ('**\u2713**' if int(dice_roll.group('threshold')) <= sum(rolls)
                     else '\u2718') if dice_roll.group('threshold') else ''))
-            await ctx.send('{}{}'.format(results, ' **' + expressions + '**' if expressions else ''))
+        await ctx.send('{}{}'.format(results, ' **' + expressions + '**' if expressions else ''))
 
 
 def setup(bot):
