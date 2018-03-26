@@ -53,11 +53,25 @@ class UtilCog(object):
             await ctx.send(results + " I can't roll that doofus")
             return
         for dice_roll in dice_rolls:
-            rolls = tuple(
-                (random.randrange((100 if dice_roll.group('sides') == '%' else int(dice_roll.group('sides')))) + 1 + (
-                     int(dice_roll.group('modifier')) if dice_roll.group('sign') == '+' else
-                    -int(dice_roll.group('modifier')) if dice_roll.group('sign') == '-' else 0
-                ) for x in range(int(dice_roll.group('dice')) if dice_roll.group('dice') else 1)))
+            rolls = []
+
+            dice = (int(dice_roll.group('dice'))
+                    if dice_roll.group('dice')
+                    else 1)
+
+            sides = (100
+                     if dice_roll.group('sides') == '%'
+                     else int(dice_roll.group('sides')))
+
+            for _ in range(dice):
+                num = random.randrange(sides) + 1
+                if dice_roll.group('modifier'):
+                    modifier = int(dice_roll.group('modifier'))
+                    if dice_roll.group('sign') == '-':
+                        modifier *= -1
+                    num += modifier
+                rolls.append(num)
+
             results += ' {} = {}{}'.format(
                 dice_roll.group('roll'),
                 str(sum(rolls)),
