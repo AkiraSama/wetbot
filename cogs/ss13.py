@@ -23,7 +23,6 @@ def goon_query(query):
 
 
 class SS13Cog(object):
-
     def __init__(self, bot):
         self.bot = bot
         self.db = bot.db.ss13
