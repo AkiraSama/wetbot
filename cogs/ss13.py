@@ -5,7 +5,9 @@ import urllib.parse
 from datetime import datetime, timedelta
 
 import discord
-from discord.ext import commands
+from discord.ext.commands import Context, command, group, is_owner
+
+from wetbot.bot import Wetbot
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -23,7 +25,7 @@ def goon_query(query):
 
 
 class SS13Cog(object):
-    def __init__(self, bot):
+    def __init__(self, bot: Wetbot):
         self.bot = bot
         self.db = bot.db.ss13
 
@@ -37,8 +39,52 @@ class SS13Cog(object):
             if self.ckey_list[c] in self.ckey_aliases:
                 self.ckey_list += self.ckey_aliases[self.ckey_list[c]]
 
-    @commands.command()
-    async def goon(self, ctx):
+    @group(invoke_without_command=True)
+    @is_owner()
+    async def ckeys(self, ctx: Context):
+        """everybehdy i kno
+        
+        list all ckeys, or add and remove them with subcommands"""
+
+        ckey_list = sorted(
+            (await self.db.find_one(
+                {'name': 'ckey_list'}))['ckeys'],
+            key=lambda ckey: ckey.lower(),
+        )
+        await ctx.send(f'```{", ".join(ckey_list)}```')
+
+    @ckeys.command(name='add')
+    async def ckeys_add(self, ctx: Context, ckey: str):
+        """yes more people"""
+
+        ckey_list = sorted(
+            (await self.db.find_one_and_update(
+                {'name': 'ckey_list'},
+                {'$addToSet': {'ckeys': ckey}},
+                return_document=True)
+             )['ckeys'],
+            key=lambda ckey: ckey.lower(),
+        )
+
+        await ctx.send(f'```{", ".join(ckey_list)}```')
+
+    @ckeys.command(name='remove')
+    async def ckeys_remove(self, ctx: Context, ckey: str):
+        """no, less people"""
+
+        ckey_list = sorted(
+            (await self.db.find_one_and_update(
+                {'name': 'ckey_list'},
+                {'$pull': {'ckeys': ckey}},
+                return_document=True)
+             )['ckeys'],
+            key=lambda ckey: ckey.lower(),
+        )
+
+        await ctx.send(f'```{", ".join(ckey_list)}```')
+
+    @command()
+    async def goon(self, ctx: Context):
         """something awful this way comes
 
         retrieves server information for both goonstation servers. seeing one
@@ -181,12 +227,12 @@ class SS13Cog(object):
             ))
 
 
-async def create_cog(bot):
+async def create_cog(bot: Wetbot):
     cog = SS13Cog(bot)
     await cog._init()
     bot.add_cog(cog)
 
 
-def setup(bot):
+def setup(bot: Wetbot):
     log.info("adding SS13Cog to bot")
     bot.loop.create_task(create_cog(bot))
