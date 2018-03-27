@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import struct
+import textwrap
 import urllib.parse
 from datetime import datetime, timedelta
 
@@ -16,6 +17,12 @@ GOON_SERVERS = {
     'goon1': ('goon1.goonhub.com', 26100),
     'goon2': ('goon2.goonhub.com', 26200),
 }
+
+THE_GOON = """```
+{anger_text}
+ __________
+(--[ .]-[ .] /
+(_______0__)```"""
 
 
 def goon_query(query):
@@ -226,6 +233,13 @@ class SS13Cog(object):
                 inline=False
             ))
 
+    @command()
+    async def goonsay(self, ctx: Context, *, anger_text: str = "A clown? On a space station? what"):
+        """not sure why im making this"""
+        anger_text = textwrap.fill(
+            anger_text[0:min(len(anger_text), 200)]
+        )
+        await ctx.send(THE_GOON.format(anger_text=anger_text))
 
 async def create_cog(bot: Wetbot):
     cog = SS13Cog(bot)
