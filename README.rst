@@ -28,7 +28,7 @@ packaging tool (which ultimately requires pip_, although `pipenv's
     $ git clone https://github.com/AkiraSama/wetbot.git
     $ cd wetbot
     $ pipenv sync
-    $ pipenv run python3 -m wetbot --help
+    $ pipenv run python -m wetbot --help
 
 To update your wetbot installation after using this method, it's a
 simple matter of pulling the latest source version and syncing your
