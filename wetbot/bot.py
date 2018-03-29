@@ -3,8 +3,10 @@ import logging
 import traceback
 from pathlib import Path
 
-import discord
-from discord.ext import commands
+from discord import ChannelType
+from discord.abc import PrivateChannel
+from discord.ext.commands import Bot
+from discord.ext.commands.errors import MissingRequiredArgument
 
 from motor.motor_asyncio import AsyncIOMotorClient
 
@@ -12,7 +14,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
-class Wetbot(commands.Bot):
+class Wetbot(Bot):
     def __init__(self, config, formatter=None, **options):
         self._config = config
         self._db = AsyncIOMotorClient().wetbot
@@ -57,13 +59,18 @@ class Wetbot(commands.Bot):
             'bot', 'pm_channel', None))
 
     async def on_message(self, message):
-        if isinstance(message.channel, discord.abc.PrivateChannel):
+        if isinstance(message.channel, PrivateChannel):
             await self.pm_channel.send('{}: {}'.format(
                 message.author,
                 message.content))
         await self.process_commands(message)
 
     async def on_command_error(self, ctx, error):
+        if isinstance(error, MissingRequiredArgument):
+            arg, _ = str(error).split(' ', maxsplit=1)
+            await ctx.send(f"missing required argument `{arg}`")
+            return
+
         log.warn('Adorably ignoring exception in command "{}":\n{}'.format(
             ctx.command,
             ''.join(traceback.format_exception(
