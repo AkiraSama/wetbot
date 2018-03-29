@@ -234,9 +234,7 @@ class SS13Cog(object):
             ))
 
     @command()
-    async def goonsay(self,
-                      ctx: Context,
-                      *,
+    async def goonsay(self, ctx: Context, *,
                       anger_text: str = "A clown? On a space station? what"):
         """not sure why im making this"""
         anger_text = textwrap.fill(
