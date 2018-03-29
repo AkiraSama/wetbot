@@ -2,7 +2,9 @@ import logging
 import random
 import re
 
-from discord.ext import commands
+from discord.ext.commands import Context, command
+
+from wetbot.bot import Wetbot
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -21,11 +23,11 @@ class UtilCog(object):
          ),
         re.IGNORECASE)
 
-    def __init__(self, bot):
+    def __init__(self, bot: Wetbot):
         self.bot = bot
 
-    @commands.command(aliases=['c'])
-    async def choose(self, ctx, *, pipe_separated_choices):
+    @command(aliases=['c'])
+    async def choose(self, ctx: Context, *, pipe_separated_choices: str):
         """PROGRAMMED VERY FAST
 
         example usage:
@@ -36,8 +38,8 @@ class UtilCog(object):
         choices = pipe_separated_choices.split('|')
         await ctx.send('**{}**'.format(random.choice(choices).strip()))
 
-    @commands.command()
-    async def roll(self, ctx, *, expressions):
+    @command()
+    async def roll(self, ctx: Context, *, expressions: str):
         """roll dice for numbers
 
         Matches to the expression:
@@ -110,6 +112,6 @@ class UtilCog(object):
         ))
 
 
-def setup(bot):
+def setup(bot: Wetbot):
     log.info("adding UtilCog to bot")
     bot.add_cog(UtilCog(bot))
