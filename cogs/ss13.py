@@ -50,7 +50,7 @@ class SS13Cog(object):
     @is_owner()
     async def ckeys(self, ctx: Context):
         """everybehdy i kno
-        
+
         list all ckeys, or add and remove them with subcommands"""
 
         ckey_list = sorted(
@@ -234,12 +234,16 @@ class SS13Cog(object):
             ))
 
     @command()
-    async def goonsay(self, ctx: Context, *, anger_text: str = "A clown? On a space station? what"):
+    async def goonsay(self,
+                      ctx: Context,
+                      *,
+                      anger_text: str = "A clown? On a space station? what"):
         """not sure why im making this"""
         anger_text = textwrap.fill(
             anger_text[0:min(len(anger_text), 200)]
         )
         await ctx.send(THE_GOON.format(anger_text=anger_text))
+
 
 async def create_cog(bot: Wetbot):
     cog = SS13Cog(bot)
