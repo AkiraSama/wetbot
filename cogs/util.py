@@ -10,7 +10,15 @@ log.setLevel(logging.DEBUG)
 
 class UtilCog(object):
     roll_check = re.compile(
-        r'(\b)(?P<roll>(?P<dice>\d*)d(?P<sides>\d+|%)(?P<sign>[+-])?(?P<modifier>\d*)(?:dc)?(?P<threshold>\d*))($|\s)',
+        (r'(\b)'
+         r'(?P<roll>'
+         r'(?P<dice>\d*)d'
+         r'(?P<sides>\d+|%)'
+         r'(?P<sign>[+-])?(?P<modifier>\d*)'
+         r'(?:dc)?(?P<threshold>\d*)'
+         r')'
+         r'($|\s)'
+         ),
         re.IGNORECASE)
 
     def __init__(self, bot):
@@ -72,16 +80,34 @@ class UtilCog(object):
                     num += modifier
                 rolls.append(num)
 
-            results += ' {} = {}{}'.format(
-                dice_roll.group('roll'),
-                str(sum(rolls)),
-                (' (' + ', '.join(str(r) + (
-                 ('**\u2713**' if int(dice_roll.group('threshold')) <= r
-                    else '\u2718') if dice_roll.group('threshold') else '')
-                 for r in rolls) + ')' if len(rolls) > 1 else
-                 ('**\u2713**' if int(dice_roll.group('threshold')) <= sum(rolls)
-                    else '\u2718') if dice_roll.group('threshold') else ''))
-        await ctx.send('{}{}'.format(results, ' **' + expressions + '**' if expressions else ''))
+            roll_sum = sum(rolls)
+            threshold = dice_roll.group('threshold')
+            if len(rolls) > 1:
+                end = ' ({})'.format(', '.join(
+                    str(roll) + (
+                        ('**\u2713**'
+                         if int(threshold) <= roll
+                         else '\u2718')
+                        if threshold else ''
+                    ) for roll in rolls
+                ))
+            else:
+                if threshold:
+                    end = ('**\u2713**'
+                           if int(threshold) <= roll_sum
+                           else '\u2718')
+                else:
+                    end = ''
+
+            results += ' {roll} = {sum}{end}'.format(
+                roll=dice_roll.group('roll'),
+                sum=roll_sum,
+                end=end,
+            )
+        await ctx.send('{results}{rest}'.format(
+            results=results,
+            rest=f' **{expressions}**' if expressions else ''
+        ))
 
 
 def setup(bot):
