@@ -3,7 +3,6 @@ import logging
 import traceback
 from pathlib import Path
 
-from discord import ChannelType
 from discord.abc import PrivateChannel
 from discord.ext.commands import Bot
 from discord.ext.commands.errors import MissingRequiredArgument
