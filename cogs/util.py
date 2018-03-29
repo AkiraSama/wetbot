@@ -167,8 +167,8 @@ class UtilCog(object):
         ``[days]d[hours]h[minutes]m[seconds]``
 
         still limited to 14 days because I don't wanna deal with
-        absolute loads of reminders for future dates clogging
-        up my database atm
+        absolute loads of reminders for future dates clogging up
+        my database atm
         """
 
         delay = TIME_FORMAT.match(time_delay)
