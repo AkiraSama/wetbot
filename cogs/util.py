@@ -40,10 +40,16 @@ class UtilCog(object):
         self.bot = bot
         self.db = bot.db.util
         self._polling_future = bot.loop.create_task(self.poll_reminders())
+        self._reminders = []
 
     def __unload(self):
+        futures = asyncio.gather(
+            self._polling_future,
+            *self._reminders,
+            return_exceptions=True,
+        )
         try:
-            self._polling_future.cancel()
+            futures.cancel()
         except asyncio.CancelledError:
             pass
 
@@ -149,7 +155,9 @@ class UtilCog(object):
                 text = reminder_doc['text']
                 await channel.send(
                     f"{mention} `{text}`")
-            self.bot.loop.create_task(reminder())
+            self._reminders.append(
+                self.bot.loop.create_task(reminder())
+            )
 
     async def poll_reminders(self):
         while True:
