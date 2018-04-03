@@ -41,28 +41,28 @@ def main(argv=None):
             f'{color}{name}{ANSI_RESET}')
 
     # define a StreamHandler for stdout
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
     formatter = logging.Formatter(
         fmt=LOG_FORMAT_STR_COLOR,
         datefmt='%m-%d %H:%M:%S',
         style='{')
-    ch.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
 
     # set up the root logger
     log = logging.getLogger('')
     log.setLevel(logging.DEBUG)
-    log.addHandler(ch)
+    log.addHandler(console_handler)
 
     # get bot's SelfUpdatingConfig
-    config = get_configuration(argv[1:], ch)
+    config = get_configuration(argv[1:], console_handler)
 
     # check for a token
     token = config.get('bot', 'token')
     if not token:
         log.info("please add your bot token to your configuration "
                  "file or pass it via the command line")
-        return 0
+        return
 
     # setup and run the bot
     bot = Wetbot(config)
