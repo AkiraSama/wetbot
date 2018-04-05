@@ -68,7 +68,7 @@ in ``requirements.txt`` from your cloned repository.
 
 .. _discord.py: https://github.com/Rapptz/discord.py
 .. _rewrite: https://github.com/Rapptz/discord.py/tree/rewrite/
-.. _Python 3.6: https://www.python.org/downloads/release/python-364/
+.. _Python 3.6: https://www.python.org/downloads/release/python-365/
 .. _MongoDB: https://docs.mongodb.com/manual/installation/
 .. _pipenv: https://docs.pipenv.org/#install-pipenv-today
 .. _pipenv fancy: https://docs.pipenv.org/install/#fancy-installation-of-pipenv
