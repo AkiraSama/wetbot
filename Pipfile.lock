@@ -52,7 +52,7 @@
         "discord.py": {
             "editable": true,
             "git": "https://github.com/Rapptz/discord.py.git",
-            "ref": "2f562bd695367aff549676850f84460a2ba0aea2"
+            "ref": "3cb6ac152edb1004dd6f6afef2adb1777902bbbe"
         },
         "idna": {
             "hashes": [
