@@ -4,7 +4,7 @@ import random
 import re
 from datetime import datetime, timedelta
 
-from discord.ext.commands import Context, command
+from discord.ext.commands import Context, command, clean_content
 
 from wetbot.bot import Wetbot
 
@@ -154,7 +154,7 @@ class UtilCog(object):
                     reminder_doc['user_id']).mention
                 text = reminder_doc['text']
                 await channel.send(
-                    f"{mention} `{text}`")
+                    f"{mention} {text}")
             self._reminders.append(
                 self.bot.loop.create_task(reminder())
             )
@@ -168,7 +168,8 @@ class UtilCog(object):
     @command()
     async def remind(self, ctx: Context,
                      time_delay: str, *,
-                     reminder_text: str):
+                     reminder_text: clean_content()
+                     ):
         """https://www.youtube.com/watch?v=YVkUvmDQ3HY
 
         takes a time_delay in the format of
