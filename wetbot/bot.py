@@ -70,12 +70,17 @@ class Wetbot(Bot):
             await ctx.send(f"missing required argument `{arg}`")
             return
 
-        log.warn('Adorably ignoring exception in command "{}":\n{}'.format(
-            ctx.command,
-            ''.join(traceback.format_exception(
-                type(error),
-                error,
-                error.__traceback__))))
+        log.warning(
+            "Adorably ignoring exception in command "
+            '"{}":\n{}'.format(
+                ctx.command,
+                ''.join(traceback.format_exception(
+                    type(error),
+                    error,
+                    error.__traceback__
+                ))
+            )
+        )
 
     async def help_redirect(self, ctx, topic):
         message = copy.copy(ctx.message)
