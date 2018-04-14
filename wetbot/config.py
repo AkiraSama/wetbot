@@ -22,7 +22,7 @@ class SelfUpdatingConfig(object):
                  "'{}'".format(self._filepath))
         log.debug("attempting to create parent directories")
         self._filepath.parent.mkdir(parents=True, exist_ok=True)
-        log.debug("attempting to touch file (umask 0o666)")
+        log.debug("attempting to touch file (umask 0o600)")
         self._filepath.touch(0o600)
         log.info("touched file '{}'".format(self._filepath))
 
@@ -30,8 +30,10 @@ class SelfUpdatingConfig(object):
         log.info("attempting to load configuration from '{}'".format(
             self._filepath))
         try:
-            with self._filepath.open(mode='r') as f:
-                self._config = json.load(f, object_pairs_hook=OrderedDict)
+            with self._filepath.open(mode='r') as config_file:
+                self._config = json.load(
+                    config_file,
+                    object_pairs_hook=OrderedDict)
         except FileNotFoundError:
             # watch this get stuck in a recursive loop someday
             self._create()
@@ -49,8 +51,8 @@ class SelfUpdatingConfig(object):
     def write(self):
         log.info("attempting to write configuration to '{}'".format(
             self._filepath))
-        with self._filepath.open(mode='w') as f:
-            json.dump(self._config, f, indent='  ')
+        with self._filepath.open(mode='w') as config_file:
+            json.dump(self._config, config_file, indent='  ')
         log.info("configuration saved successfully")
 
     def get(self, section, value, default=''):
@@ -74,25 +76,24 @@ class SelfUpdatingConfig(object):
         return self._config[section][value]
 
 
-parser = argparse.ArgumentParser(
-    description="wetbot - a discord.py based personal bot")
-parser.add_argument('--config', action='store',
-                    default='./data/config/wetbot.cfg',
-                    help="filepath to configuration file",
-                    metavar='FILEPATH', dest='config_file')
-parser.add_argument('-v', '--verbose', action='store_true',
-                    help="increase output verbosity")
-parser.add_argument('token', action='store', nargs='?',
-                    help="bot user token")
-parser.add_argument('--owner', action='store', default=None, type=int,
-                    help="bot owner user id",
-                    metavar='OWNER_ID', dest='owner_id')
-parser.add_argument('--prefix', action='store', default=None,
-                    help="command prefix string",
-                    dest='command_prefix')
-
-
 def get_configuration(argv, log_handler):
+    parser = argparse.ArgumentParser(
+        description="wetbot - a discord.py based personal bot")
+    parser.add_argument('--config', action='store',
+                        default='./data/config/wetbot.cfg',
+                        help="filepath to configuration file",
+                        metavar='FILEPATH', dest='config_file')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help="increase output verbosity")
+    parser.add_argument('token', action='store', nargs='?',
+                        help="bot user token")
+    parser.add_argument('--owner', action='store', default=None, type=int,
+                        help="bot owner user id",
+                        metavar='OWNER_ID', dest='owner_id')
+    parser.add_argument('--prefix', action='store', default=None,
+                        help="command prefix string",
+                        dest='command_prefix')
+
     args = parser.parse_args(argv)
     if args.verbose:
         log_handler.setLevel(logging.DEBUG)
