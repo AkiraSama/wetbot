@@ -20,8 +20,10 @@ class OwnerCog(object):
         bot = self.bot  # noqa: F841
         try:
             out = eval(msg)
-        except Exception as e:
-            out = '{}: {}'.format(type(e).__name__, e)
+        except Exception as exception:
+            out = '{}: {}'.format(
+                type(exception).__name__,
+                exception)
         if out == '':
             out = '\u200b'
         if ctx.invoked_with[0] == 'e':
