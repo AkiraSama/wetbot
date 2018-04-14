@@ -86,7 +86,7 @@ class RipCog(object):
     async def rips_add_rip(self, ctx: Context, name: str, url: str):
         """add a new rip to a name"""
         res = await self.db.update_one(
-            {'names': {'$in': [name]}},
+            {'names': {'$in': [name.lower()]}},
             {'$addToSet': {'rips': url}})
         if res.modified_count == 0:
             await ctx.send('no such name!')
