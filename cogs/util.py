@@ -78,42 +78,61 @@ class UtilCog(object):
         threshold == number required for roll to succeed
 
         Note that the only required elements are the 'd' and the number of
-        sides. Everything else can be included or disincluded at your leisure.
+        sides. Everything else can be included or excluded at your leisure.
         """
+
         dice_rolls = []
+        # Match valid expressions in expressions until we've got no more.
         while ROLL_CHECK.match(expressions):
             dice_roll, *expressions = expressions.split(maxsplit=1)
             expressions = expressions[0] if expressions else ''
             dice_rolls.append(ROLL_CHECK.match(dice_roll))
-        results = ctx.author.mention
-        if not dice_rolls:
-            await ctx.send(results + " I can't roll that doofus")
+
+        # We begin our output with a mention to the calling user.
+        output = ctx.author.mention
+        if not dice_rolls:  # No valid expressions.
+            await ctx.send(output + " I can't roll that doofus")
             return
+
+        # Evaluate each dice roll expression.
         for dice_roll in dice_rolls:
             rolls = []
 
-            dice = (int(dice_roll.group('dice'))
-                    if dice_roll.group('dice')
-                    else 1)
+            # Number of dice is optional, assume 1.
+            if dice_roll.group('dice'):
+                dice = int(dice_roll.group('dice'))
+            else:
+                dice = 1
 
-            sides = (100
-                     if dice_roll.group('sides') == '%'
-                     else int(dice_roll.group('sides')))
+            # Special syntax % for 100-sided die.
+            if dice_roll.group('sides') == '%':
+                sides = 100
+            else:
+                sides = int(dice_roll.group('sides'))
 
+            # Do all the rolling.
             for _ in range(dice):
                 num = random.randrange(sides) + 1
+
+                # Resolve modifiers for each roll.
                 if dice_roll.group('modifier'):
                     modifier = int(dice_roll.group('modifier'))
                     if dice_roll.group('sign') == '-':
                         modifier *= -1
                     num += modifier
+
                 rolls.append(num)
 
             roll_sum = sum(rolls)
             threshold = dice_roll.group('threshold')
+
             if len(rolls) > 1:
-                end = ' ({})'.format(', '.join(
+                # We've got more than one roll, the suffix appended to the
+                # sum will be a list of the individual rolls.
+
+                end = ' ({})'.format(', '.join(  # Join all the rolls.
                     str(roll) + (
+                        # If a threshold exists, chuck in some Unicode.
                         ('**\u2713**'
                          if int(threshold) <= roll
                          else '\u2718')
@@ -121,20 +140,27 @@ class UtilCog(object):
                     ) for roll in rolls
                 ))
             else:
+                # We have only one roll, the sum is sufficient to represent
+                # the dice rolled.
                 if threshold:
+                    # If a threshold exists, chuck in some Unicode.
                     end = ('**\u2713**'
                            if int(threshold) <= roll_sum
                            else '\u2718')
                 else:
                     end = ''
 
-            results += ' {roll} = {sum}{end}'.format(
+            # Extend our output with the results of this roll.
+            output += ' {roll} = {sum}{end}'.format(
                 roll=dice_roll.group('roll'),
                 sum=roll_sum,
                 end=end,
             )
-        await ctx.send('{results}{rest}'.format(
-            results=results,
+
+        # Send across all the results, and anything in expressions that
+        # wasn't matched as a dice roll.
+        await ctx.send('{output}{rest}'.format(
+            output=output,
             rest=f' **{expressions}**' if expressions else ''
         ))
 
