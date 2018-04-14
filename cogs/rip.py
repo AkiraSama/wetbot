@@ -62,13 +62,13 @@ class RipCog(object):
             return
         else:
             names = tuple(n.lower() for n in names)
-        c = self.db.find({'names': {'$in': names}}, {'_id': ''})
-        count = await c.count()
+        cursor = self.db.find({'names': {'$in': names}}, {'_id': ''})
+        count = await cursor.count()
         if count > 1:
             await ctx.send("name conflict!")
         elif count == 1:
-            async for e in c:
-                i = e['_id']
+            async for element in cursor:
+                i = element['_id']
             doc = await self.db.find_one_and_update(
                 {'_id': i},
                 {'$addToSet': {'names': {'$each': names}}},
