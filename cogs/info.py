@@ -62,7 +62,7 @@ class InfoCog(object):
                         except KeyError:
                             return (
                                 None,
-                                "I got nothin ¯\_(ツ)_/¯")
+                                r"I got nothin ¯\_(ツ)_/¯")
                 else:
                     return (
                         None,
@@ -132,7 +132,7 @@ class InfoCog(object):
                     out = ('http://urbandictionary.com/define.php?term=' +
                            urllib.parse.quote(results[0]['word']))
                 elif response.get('result_type') == 'no_results':
-                    out = "I got nothin ¯\_(ツ)_/¯"
+                    out = r"I got nothin ¯\_(ツ)_/¯"
                 else:
                     out = json_format(response)
 
@@ -243,7 +243,7 @@ class InfoCog(object):
                 if response['metadata']['total'] > 0:
                     word_id = response['results'][0]['id']
                 else:
-                    await ctx.send("I got nothin ¯\_(ツ)_/¯")
+                    await ctx.send(r"I got nothin ¯\_(ツ)_/¯")
                     return
 
         async with self.session.get(
