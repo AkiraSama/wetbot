@@ -42,9 +42,9 @@ class SS13Cog(object):
         self.ckey_aliases = (await self.db.find_one(
             {'name': 'ckey_aliases'}))['ckeys']
 
-        for c in range(len(self.ckey_list)):
-            if self.ckey_list[c] in self.ckey_aliases:
-                self.ckey_list += self.ckey_aliases[self.ckey_list[c]]
+        for i in range(len(self.ckey_list)):
+            if self.ckey_list[i] in self.ckey_aliases:
+                self.ckey_list += self.ckey_aliases[self.ckey_list[i]]
 
     @group(invoke_without_command=True)
     @is_owner()
@@ -158,11 +158,11 @@ class SS13Cog(object):
                 if key != 'admins'
             ]
 
-            for a in range(len(admins)):
-                if admins[a] in self.ckey_aliases:
-                    admins += self.ckey_aliases[admins[a]]
+            for i in range(len(admins)):
+                if admins[i] in self.ckey_aliases:
+                    admins += self.ckey_aliases[admins[i]]
                 else:
-                    log.info('unaliased admin: ' + admins[a])
+                    log.info('unaliased admin: ' + admins[i])
             players = ', '.join(
                 ('\\\u2b50' if player in admins else '') +
                 ('\\\U0001f354' if player in self.ckey_list else '') +
