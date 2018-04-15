@@ -12,8 +12,17 @@ log.setLevel(logging.DEBUG)
 
 class SPostCog(object):
     wang = re.compile(
-        r'(\b|_)(([bh]?w)h?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?(\s*([bh]?w|d|st)h?r?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?)*)(\b|_)',  # noqa: E501
-        re.IGNORECASE)
+        (r'(\b|_)'
+         r'('
+         r'([bh]?w)h?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?'
+         r'(\s*'
+         r'([bh]?w)h?[aeo]+[ym]?n+g(e?[ziufdry]?|ing|um)?s?'
+         r')*'
+         r')'
+         r'(\b|_)'
+         ),
+        re.IGNORECASE
+    )
 
     def __init__(self, bot):
         self.bot = bot
@@ -61,7 +70,7 @@ class SPostCog(object):
             await ctx.message.delete()
         except discord.errors.Forbidden:
             pass
-        await ctx.send(ctx.author.mention + ' ¯\_(ツ)_/¯s')
+        await ctx.send(ctx.author.mention + r' ¯\_(ツ)_/¯s')
 
     @commands.command()
     async def lenny(self, ctx, *, person_owner_only: discord.Member = None):
