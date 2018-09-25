@@ -131,10 +131,12 @@ class InfoCog(object):
                 if results:
                     out = ('http://urbandictionary.com/define.php?term=' +
                            urllib.parse.quote(results[0]['word']))
-                elif response.get('result_type') == 'no_results':
+                elif results is not None or response.get('result_type') == 'no_results':
                     out = r"I got nothin ¯\_(ツ)_/¯"
                 else:
                     out = json_format(response)
+            else:
+                out = json_format(response)
 
         await ctx.send(out)
 

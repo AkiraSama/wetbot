@@ -65,8 +65,15 @@ class UtilCog(object):
         choices = pipe_separated_choices.split('|')
         await ctx.send('**{}**'.format(random.choice(choices).strip()))
 
+    @command(ignore_extra=False)
+    async def flip(self, ctx: Context):
+        """fine"""
+
+        await ctx.send('**{}**'.format(
+            'heads' if random.random() < 0.5 else 'tails'))
+
     @command()
-    async def roll(self, ctx: Context, *, expressions: str):
+    async def roll(self, ctx: Context, *, expressions: str = 'd20'):
         """roll dice for numbers
 
         Matches to the expression:

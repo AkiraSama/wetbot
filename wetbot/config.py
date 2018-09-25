@@ -55,25 +55,30 @@ class SelfUpdatingConfig(object):
             json.dump(self._config, config_file, indent='  ')
         log.info("configuration saved successfully")
 
-    def get(self, section, value, default=''):
+    def get(self, section, key, default=''):
         if self._args and section == self._default_section:
-            if value in self._args and self._args[value] is not None:
+            if key in self._args and self._args[key] is not None:
                 log.debug("requested value '{}' found in arguments with "
                           "a value of '{}'".format(
-                              value, self._args[value]))
-                return self._args[value]
+                              key, self._args[key]))
+                return self._args[key]
         if self._config is None:
             # this is a massive cop out for now
             raise AttributeError()
         if section not in self._config:
             log.debug("created section '{}'".format(section))
             self._config[section] = OrderedDict()
-        if value not in self._config[section]:
+        if key not in self._config[section]:
             log.debug("assigned default value '{}' to value '{}' in "
-                      "section '{}'".format(default, value, section))
-            self._config[section][value] = default
+                      "section '{}'".format(default, key, section))
+            self._config[section][key] = default
             self.write()
-        return self._config[section][value]
+        return self._config[section][key]
+
+    def set(self, section, key, value):
+        self._config[section][key] = value
+        self.write()
+        return self._config[section][key]
 
 
 def get_configuration(argv, log_handler):

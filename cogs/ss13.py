@@ -16,6 +16,7 @@ log.setLevel(logging.DEBUG)
 GOON_SERVERS = {
     'goon1': ('goon1.goonhub.com', 26100),
     'goon2': ('goon2.goonhub.com', 26200),
+    'goon3': ('goon3.goonhub.com', 26300),
 }
 
 THE_GOON = """```
@@ -186,7 +187,7 @@ class SS13Cog(object):
                     if shuttle < 0
                     else (
                         ' (in transit)'
-                        if shuttle not in (0, 600)
+                        if shuttle not in (0, 60*6)
                         else ''
                     )
                 )
