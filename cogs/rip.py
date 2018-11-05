@@ -56,22 +56,22 @@ class RipCog(object):
             await self.bot.help_redirect(ctx, 'rips add')
 
     @rips_add.command(name='name')
-    async def rips_add_name(self, ctx: Context, *names: str):
+    async def rips_add_name(self, ctx: Context, *new_names: str):
         """add a new name or aliases for an existing name"""
-        if not names:
+        if not new_names:
             return
         else:
-            names = tuple(n.lower() for n in names)
-        cursor = self.db.find({'names': {'$in': names}}, {'_id': ''})
-        count = await cursor.count()
+            new_names = tuple(n.lower() for n in new_names)
+        cursor = self.db.find({'names': {'$in': new_names}}, {'_id': ''})
+        names = await cursor.to_list(None)
+        count = len(names)
         if count > 1:
             await ctx.send("name conflict!")
         elif count == 1:
-            async for element in cursor:
-                i = element['_id']
+            i = names[0]['_id']
             doc = await self.db.find_one_and_update(
                 {'_id': i},
-                {'$addToSet': {'names': {'$each': names}}},
+                {'$addToSet': {'names': {'$each': new_names}}},
                 {'names': ''},
                 return_document=True)
             await ctx.send(', '.join(doc['names']))
