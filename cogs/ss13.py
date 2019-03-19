@@ -3,6 +3,7 @@ import logging
 import struct
 import textwrap
 import urllib.parse
+from collections import deque
 from datetime import datetime, timedelta
 
 import discord
@@ -17,6 +18,8 @@ GOON_SERVERS = {
     'goon1': ('goon1.goonhub.com', 26100),
     'goon2': ('goon2.goonhub.com', 26200),
     'goon3': ('goon3.goonhub.com', 26300),
+    'goon4': ('goon4.goonhub.com', 26400),
+    'goon5': ('goon5.goonhub.com', 26500),
 }
 
 THE_GOON = """```
@@ -164,19 +167,43 @@ class SS13Cog(object):
                     admins += self.ckey_aliases[admins[i]]
                 else:
                     log.info('unaliased admin: ' + admins[i])
-            players = ', '.join(
-                ('\\\u2b50' if player in admins else '') +
-                ('\\\U0001f354' if player in self.ckey_list else '') +
-                player
-                for player
-                in sorted(
+            
+            players = deque()
+            players_cur = []
+            total_chars = 0
+            for player in sorted(
                     params['player' + str(x)][0]
                     for x
                     in range(
                         int(params['players'][0])
                     )
-                )
-            )
+            ):
+                if total_chars != 0:
+                    chars = 2
+                else:
+                    chars = 0
+
+                entry = player
+                chars += len(entry)
+
+                if player in self.ckey_list:
+                    entry = '\\\U0001f354' + entry
+                    chars += 4
+
+                if player in admins:
+                    entry = '\\\u2b50' + entry
+                    chars += 2
+
+                if total_chars + chars > 1024:
+                    players.append(', '.join(players_cur))
+                    players_cur = []
+                    total_chars = 0
+
+                total_chars += chars
+                players_cur.append(player)
+
+            if players_cur:
+                players.append(', '.join(players_cur))
 
             try:
                 shuttle = int(params['shuttle_time'][0])
@@ -230,9 +257,22 @@ class SS13Cog(object):
                        else 'N/A')
             ).add_field(
                 name='Players ({})'.format(params['players'][0]),
-                value=players if players else 'N/A',
+                value=players.popleft() if players else 'N/A',
                 inline=False
             ))
+
+            if players:
+                for plist in players:
+                    await ctx.send(embed=discord.Embed(
+                        title=embed_title,
+                        type='rich',
+                        timestamp=time,
+                        color=discord.Color.green(),
+                    ).add_field(
+                        name='Players (cont.)',
+                        value=plist,
+                        inline=False,
+                    ))
 
     @command()
     async def goonsay(self, ctx: Context, *,
