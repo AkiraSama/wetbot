@@ -167,7 +167,7 @@ class SS13Cog(object):
                     admins += self.ckey_aliases[admins[i]]
                 else:
                     log.info('unaliased admin: ' + admins[i])
-            
+
             players = deque()
             players_cur = []
             total_chars = 0
@@ -200,7 +200,7 @@ class SS13Cog(object):
                     total_chars = 0
 
                 total_chars += chars
-                players_cur.append(player)
+                players_cur.append(entry)
 
             if players_cur:
                 players.append(', '.join(players_cur))
