@@ -1,7 +1,7 @@
 import logging
 import random
 
-from discord.ext.commands import Context, command, group, is_owner
+from discord.ext.commands import Cog, Context, command, group, is_owner
 
 from wetbot.bot import Wetbot
 
@@ -16,7 +16,7 @@ def comma_separated_values(argument):
     return [a.strip() for a in argument.split(',')]
 
 
-class RipCog(object):
+class RipCog(Cog):
     def __init__(self, bot):
         self.bot = bot
         self.db = bot.db.rips
@@ -77,7 +77,7 @@ class RipCog(object):
             await ctx.send(', '.join(doc['names']))
 
         else:
-            res = await self.db.insert_one({'names': names, 'rips': []})
+            res = await self.db.insert_one({'names': new_names, 'rips': []})
             doc = await self.db.find_one(
                 {'_id': res.inserted_id}, {'names': ''})
             await ctx.send(', '.join(doc['names']))

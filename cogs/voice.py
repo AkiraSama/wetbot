@@ -1,7 +1,7 @@
 import logging
 
 from discord import Member
-from discord.ext.commands import Context, command, is_owner
+from discord.ext.commands import Cog, Context, command, is_owner
 
 from wetbot.bot import Wetbot
 
@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
-class VoiceCog(object):
+class VoiceCog(Cog):
     def __init__(self, bot: Wetbot):
         self.bot = bot
 

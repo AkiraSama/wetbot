@@ -4,7 +4,7 @@ import urllib.parse
 
 from aiohttp import ClientSession
 
-from discord.ext.commands import Context, command
+from discord.ext.commands import Cog, Context, command
 
 from wetbot.bot import Wetbot
 
@@ -26,7 +26,7 @@ def json_format(response):
         json.dumps(response, indent='  '))
 
 
-class InfoCog(object):
+class InfoCog(Cog):
     def __init__(self, bot: Wetbot):
         self.bot = bot
         self.session = ClientSession(loop=bot.loop)

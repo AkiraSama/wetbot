@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
-class SPostCog(object):
+class SPostCog(commands.Cog):
     wang = re.compile(
         (r'(\b|_)'
          r'('

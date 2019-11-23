@@ -4,7 +4,7 @@ import random
 import re
 from datetime import datetime, timedelta
 
-from discord.ext.commands import Context, command, clean_content
+from discord.ext.commands import Cog, Context, command, clean_content
 
 from wetbot.bot import Wetbot
 
@@ -35,7 +35,7 @@ TIME_FORMAT = re.compile(
 POLL_PERIOD = 3600
 
 
-class UtilCog(object):
+class UtilCog(Cog):
     def __init__(self, bot: Wetbot):
         self.bot = bot
         self.db = bot.db.util

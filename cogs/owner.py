@@ -1,7 +1,7 @@
 import logging
 
 import discord
-from discord.ext.commands import Context, command, is_owner
+from discord.ext.commands import Cog, Context, command, is_owner
 
 from wetbot.bot import Wetbot
 
@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
-class OwnerCog(object):
+class OwnerCog(Cog):
     def __init__(self, bot: Wetbot):
         self.bot = bot
 

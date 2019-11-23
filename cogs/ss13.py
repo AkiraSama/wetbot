@@ -7,7 +7,7 @@ from collections import deque
 from datetime import datetime, timedelta
 
 import discord
-from discord.ext.commands import Context, command, group, is_owner
+from discord.ext.commands import Cog, Context, command, group, is_owner
 
 from wetbot.bot import Wetbot
 
@@ -35,7 +35,7 @@ def goon_query(query):
     ) + b'\x00\x00\x00\x00\x00' + query.encode('ascii') + b'\x00'
 
 
-class SS13Cog(object):
+class SS13Cog(Cog):
     def __init__(self, bot: Wetbot):
         self.bot = bot
         self.db = bot.db.ss13

@@ -2,6 +2,8 @@ import copy
 import logging
 import urllib.parse
 
+from aiohttp import ClientSession
+
 import discord
 from discord.ext import commands
 
@@ -9,10 +11,10 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
-class TerrariaCog(object):
+class TerrariaCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.session = bot.http._session
+        self.session = ClientSession(loop=bot.loop)
 
     @commands.group(aliases=('terr', 'terrararar'))
     async def terraria(self, ctx):
