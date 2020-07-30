@@ -97,6 +97,10 @@ class SPostCog(commands.Cog):
                 'stickerline-201503031729571.png'
             )
 
+    # The below continues to be wildly hacky and generally
+    # unethical, but I am too lazy to solve the problem in
+    # a legitimate way.
+
     def add_generic(self, doc):
         async def func(self, ctx):
             await ctx.send(random.choice(doc['urls']))
@@ -108,9 +112,7 @@ class SPostCog(commands.Cog):
             aliases=aliases if aliases else []
         )(func)
         func.instance = self
-        setattr(self,
-                doc['name'],
-                func)
+        self.__cog_commands__ += (func,)
 
     def add_embed(self, doc):
         async def func(self, ctx):
@@ -132,9 +134,7 @@ class SPostCog(commands.Cog):
             aliases=aliases if aliases else []
         )(func)
         func.instance = self
-        setattr(self,
-                doc['name'],
-                func)
+        self.__cog_commands__ += (func,)
 
     def add_pattern(self, doc):
         async def func(self, ctx):
@@ -154,9 +154,7 @@ class SPostCog(commands.Cog):
             hidden=True
         )(func)
         func.instance = self
-        setattr(self,
-                doc['name'],
-                func)
+        self.__cog_commands__ += (func,)
 
 
 async def create_cog(bot):
