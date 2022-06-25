@@ -1,4 +1,4 @@
-aiohttp==2.2.5
+aiohttp==3.8.1
 async-timeout==2.0.1
 chardet==3.0.4
 -e git+https://github.com/Rapptz/discord.py.git@56650ae7c235a85dac202ea57aa1bab2603a7f92#egg=discord.py
